@@ -1,4 +1,4 @@
-package com.roko.cryptocoins.util
+package com.roko.cryptocoins.core.presentation.util
 
 import com.roko.cryptocoins.R
 

@@ -4,7 +4,7 @@ import com.roko.cryptocoins.crypto.domain.Coin
 import com.roko.cryptocoins.crypto.presentation.models.CoinUi
 import com.roko.cryptocoins.crypto.presentation.models.DisplayableCurrency
 import com.roko.cryptocoins.crypto.presentation.models.DisplayableNumber
-import com.roko.cryptocoins.util.getDrawableIdForCoin
+import com.roko.cryptocoins.core.presentation.util.getDrawableIdForCoin
 import java.text.NumberFormat
 import java.util.Locale
 
