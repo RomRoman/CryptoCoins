@@ -6,6 +6,7 @@ import com.roko.cryptocoins.core.domain.util.onFailure
 import com.roko.cryptocoins.core.domain.util.onSuccess
 import com.roko.cryptocoins.crypto.domain.CoinDataSource
 import com.roko.cryptocoins.crypto.presentation.mappers.toCoinUi
+import com.roko.cryptocoins.crypto.presentation.models.CoinUi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
 
 class CoinListViewModel(
     private val coinDataSource: CoinDataSource
@@ -32,6 +34,8 @@ class CoinListViewModel(
 
     private val _events = Channel<CoinListEvent>()
     val events = _events.receiveAsFlow()
+
+
 
     private fun loadCoins() {
         viewModelScope.launch {
@@ -54,15 +58,32 @@ class CoinListViewModel(
     fun onAction(action: CoinListAction) {
         when(action) {
             is CoinListAction.OnCoinClick -> {
-                _state.update {
-                    it.copy(selectedCoin = action.coinUi)
-                }
+                selectCoin(action.coinUi)
             }
             CoinListAction.OnRefresh -> {
                 loadCoins()
             }
         }
+    }
 
+    private fun selectCoin(coinUi: CoinUi) {
+        _state.update {
+            it.copy(selectedCoin = coinUi)
+        }
+        viewModelScope.launch {
+            coinDataSource
+                .getCoinHistory(
+                    coinId = coinUi.id,
+                    start = ZonedDateTime.now().minusDays(5),
+                    end = ZonedDateTime.now()
+                )
+                .onSuccess { history ->
+                    println(history)
+                }
+                .onFailure { error ->
+                    _events.send(CoinListEvent.Error(error))
+                }
+        }
     }
 
 }
