@@ -2,6 +2,9 @@ package com.roko.cryptocoins.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+val greenPercentageContainer = Color(0xFF2B6A46)
+val greenPercentageContent = Color(0xFF94D5A9)
+
 val primaryLight = Color(0xFF2B6A46)
 val onPrimaryLight = Color(0xFFFFFFFF)
 val primaryContainerLight = Color(0xFFAFF1C4)
