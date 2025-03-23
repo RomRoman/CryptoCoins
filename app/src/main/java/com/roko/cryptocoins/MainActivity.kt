@@ -9,8 +9,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.roko.cryptocoins.crypto.presentation.coin_detail.CoinDetailScreenRoot
 import com.roko.cryptocoins.crypto.presentation.coin_list.CoinListScreenRoot
 import com.roko.cryptocoins.crypto.presentation.coin_list.CoinListViewModel
 import com.roko.cryptocoins.ui.theme.CryptoCoinsTheme
@@ -24,10 +27,22 @@ class MainActivity : ComponentActivity() {
             CryptoCoinsTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     val viewModel = koinViewModel<CoinListViewModel>()
-                    CoinListScreenRoot(
-                        viewModel = viewModel,
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    val state by viewModel.state.collectAsStateWithLifecycle()
+
+                    when {
+                        state.selectedCoin != null -> {
+                            CoinDetailScreenRoot(
+                                viewModel = viewModel,
+                                modifier = Modifier.padding(innerPadding)
+                            )
+                        }
+                        else -> {
+                            CoinListScreenRoot(
+                                viewModel = viewModel,
+                                modifier = Modifier.padding(innerPadding),
+                            )
+                        }
+                    }
                 }
             }
         }

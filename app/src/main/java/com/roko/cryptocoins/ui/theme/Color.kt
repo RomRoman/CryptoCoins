@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 val greenPercentageContainer = Color(0xFF2B6A46)
 val greenPercentageContent = Color(0xFF94D5A9)
+val greenTrendingContent = Color(0xFF0C5130)
 
 val primaryLight = Color(0xFF2B6A46)
 val onPrimaryLight = Color(0xFFFFFFFF)
