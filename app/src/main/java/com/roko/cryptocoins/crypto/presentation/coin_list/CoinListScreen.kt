@@ -11,11 +11,13 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.roko.cryptocoins.crypto.presentation.coin_list.components.CoinListItem
 import com.roko.cryptocoins.crypto.presentation.coin_list.components.previewCoin
 import com.roko.cryptocoins.ui.theme.CryptoCoinsTheme
@@ -26,11 +28,12 @@ fun CoinListScreenRoot(
     modifier: Modifier = Modifier,
     viewModel: CoinListViewModel = koinViewModel()
 ) {
-//    CoinListScreen(
-//        state = viewModel.state,
-//        onAction = viewModel::onAction,
-//        modifier = modifier
-//    )
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    CoinListScreen(
+        state = state,
+        onAction = viewModel::onAction,
+        modifier = modifier
+    )
 }
 
 @Composable
