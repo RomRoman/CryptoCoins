@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">CryptoCoins</string>
+    <string name="error_request_timeout">Opps, request timeout error, try later</string>
+    <string name="error_too_many_requests">Too many request, wait and try again</string>
+    <string name="error_no_internet">Seems like you have no internet, check your internet connection</string>
+    <string name="error_server_error">Something went wrong, try again later</string>
+    <string name="error_serialization_error">Couldn\'t serialize or deserialize object</string>
+    <string name="error_unknown">Opps, something went wrong</string>
 </resources>

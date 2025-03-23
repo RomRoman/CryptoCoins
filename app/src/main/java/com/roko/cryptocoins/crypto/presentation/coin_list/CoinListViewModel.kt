@@ -6,9 +6,11 @@ import com.roko.cryptocoins.core.domain.util.onFailure
 import com.roko.cryptocoins.core.domain.util.onSuccess
 import com.roko.cryptocoins.crypto.domain.CoinDataSource
 import com.roko.cryptocoins.crypto.presentation.mappers.toCoinUi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -28,6 +30,9 @@ class CoinListViewModel(
             CoinListState()
         )
 
+    private val _events = Channel<CoinListEvent>()
+    val events = _events.receiveAsFlow()
+
     private fun loadCoins() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
@@ -41,6 +46,7 @@ class CoinListViewModel(
                 }
                 .onFailure { error ->
                     _state.update { it.copy(isLoading = false) }
+                    _events.send(CoinListEvent.Error(error))
                 }
         }
     }
