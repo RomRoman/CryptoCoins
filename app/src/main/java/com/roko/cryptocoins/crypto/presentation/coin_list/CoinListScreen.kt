@@ -3,6 +3,7 @@ package com.roko.cryptocoins.crypto.presentation.coin_list
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,7 +24,8 @@ import com.roko.cryptocoins.ui.theme.CryptoCoinsTheme
 fun CoinListScreen(
     state: CoinListState,
     onAction: (CoinListAction) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    innerPadding: PaddingValues = PaddingValues()
 ) {
     if (state.isLoading) {
         LoadingState()
@@ -31,6 +33,7 @@ fun CoinListScreen(
         LazyColumn(
             modifier = modifier
                 .fillMaxSize(),
+            contentPadding = innerPadding,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(state.coins) {coinUi ->

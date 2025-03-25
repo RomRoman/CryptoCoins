@@ -3,6 +3,8 @@
 package com.roko.cryptocoins.core.navigation
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
@@ -27,7 +29,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun AdaptiveCoinListDetailPane(
     viewModel: CoinListViewModel = koinViewModel(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    innerPadding: PaddingValues = PaddingValues()
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -64,19 +67,19 @@ fun AdaptiveCoinListDetailPane(
                         }
                        else -> Unit
                     }
-
-                }
-
+                },
+                innerPadding = innerPadding,
+                modifier = modifier
             )
 
         },
         detailPane = {
             AnimatedPane {
                 CoinDetailScreen(
-                    state = state
+                    state = state,
+                    modifier = modifier.padding(innerPadding)
                 )
             }
         },
-        modifier = modifier
     )
 }
