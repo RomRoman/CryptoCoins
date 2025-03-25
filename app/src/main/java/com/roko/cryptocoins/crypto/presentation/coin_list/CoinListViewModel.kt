@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.roko.cryptocoins.core.domain.util.onFailure
 import com.roko.cryptocoins.core.domain.util.onSuccess
 import com.roko.cryptocoins.crypto.domain.CoinDataSource
+import com.roko.cryptocoins.crypto.presentation.coin_detail.chart.DataPoint
 import com.roko.cryptocoins.crypto.presentation.mappers.toCoinUi
 import com.roko.cryptocoins.crypto.presentation.models.CoinUi
 import kotlinx.coroutines.channels.Channel
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 class CoinListViewModel(
     private val coinDataSource: CoinDataSource
@@ -78,7 +80,25 @@ class CoinListViewModel(
                     end = ZonedDateTime.now()
                 )
                 .onSuccess { history ->
-                    println(history)
+                    val dataPoints = history
+                        .sortedBy { it.dateTime }
+                        .map {
+                            DataPoint(
+                                x = it.dateTime.hour.toFloat(),
+                                y = it.priceUsd.toFloat(),
+                                xLabel = DateTimeFormatter
+                                    .ofPattern("ha\nM/d")
+                                    .format(it.dateTime)
+                            )
+                        }
+
+                    _state.update {
+                        it.copy(
+                            selectedCoin = it.selectedCoin?.copy(
+                                coinPriceHistory = dataPoints
+                            ),
+                        )
+                    }
                 }
                 .onFailure { error ->
                     _events.send(CoinListEvent.Error(error))
