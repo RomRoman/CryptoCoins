@@ -39,38 +39,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.unit.sp
 import com.roko.cryptocoins.R
 import com.roko.cryptocoins.crypto.presentation.coin_detail.chart.ChartStyle
 import com.roko.cryptocoins.crypto.presentation.coin_detail.chart.DataPoint
 import com.roko.cryptocoins.crypto.presentation.coin_detail.chart.LineChart
 import com.roko.cryptocoins.crypto.presentation.coin_detail.components.InfoCard
 import com.roko.cryptocoins.crypto.presentation.coin_list.CoinListState
-import com.roko.cryptocoins.crypto.presentation.coin_list.CoinListViewModel
 import com.roko.cryptocoins.crypto.presentation.coin_list.components.previewCoin
 import com.roko.cryptocoins.crypto.presentation.mappers.toDisplayableCurrency
 import com.roko.cryptocoins.ui.theme.CryptoCoinsTheme
 import com.roko.cryptocoins.ui.theme.greenPercentageContent
 import com.roko.cryptocoins.ui.theme.greenTrendingContent
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun CoinDetailScreenRoot(
-    viewModel: CoinListViewModel = koinViewModel(),
-    modifier: Modifier = Modifier
-) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
-    CoinDetailScreen(
-        state = state,
-//        onAction = viewModel::onAction,
-        modifier = modifier
-    )
-}
-
-@Composable
-private fun CoinDetailScreen(
+fun CoinDetailScreen(
     state: CoinListState,
-//    onAction: (CoinDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (state.isLoading) {
