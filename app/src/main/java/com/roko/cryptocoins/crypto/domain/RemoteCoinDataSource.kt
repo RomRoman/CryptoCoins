@@ -4,7 +4,7 @@ import com.roko.cryptocoins.core.domain.util.NetworkError
 import com.roko.cryptocoins.core.domain.util.Result
 import java.time.ZonedDateTime
 
-interface CoinDataSource {
+interface RemoteCoinDataSource {
     suspend fun getCoins(): Result<List<Coin>, NetworkError>
     suspend fun getCoinHistory(
         coinId: String,

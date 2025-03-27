@@ -10,7 +10,7 @@ import com.roko.cryptocoins.crypto.data.mappers.toCoinPrice
 import com.roko.cryptocoins.crypto.data.networking.dto.CoinHistoryResponseDto
 import com.roko.cryptocoins.crypto.data.networking.dto.CoinsResponseDto
 import com.roko.cryptocoins.crypto.domain.Coin
-import com.roko.cryptocoins.crypto.domain.CoinDataSource
+import com.roko.cryptocoins.crypto.domain.RemoteCoinDataSource
 import com.roko.cryptocoins.crypto.domain.CoinPrice
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -18,9 +18,9 @@ import io.ktor.client.request.parameter
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-class RemoteCoinDataSource(
+class KtorRemoteCoinDataSource(
    private val httpClient: HttpClient
-) : CoinDataSource {
+) : RemoteCoinDataSource {
 
     override suspend fun getCoins(): Result<List<Coin>, NetworkError> {
         return safeCall<CoinsResponseDto> {

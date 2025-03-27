@@ -4,13 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.roko.cryptocoins.core.domain.util.onFailure
 import com.roko.cryptocoins.core.domain.util.onSuccess
-import com.roko.cryptocoins.crypto.domain.CoinDataSource
+import com.roko.cryptocoins.crypto.domain.CoinRepository
+import com.roko.cryptocoins.crypto.domain.RemoteCoinDataSource
 import com.roko.cryptocoins.crypto.presentation.coin_detail.chart.DataPoint
 import com.roko.cryptocoins.crypto.presentation.mappers.toCoinUi
 import com.roko.cryptocoins.crypto.presentation.models.CoinUi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -20,13 +24,17 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class CoinListViewModel(
-    private val coinDataSource: CoinDataSource
+    private val coinDataSource: RemoteCoinDataSource,
+    private val coinRepository: CoinRepository
 ): ViewModel() {
 
     private val _state = MutableStateFlow(CoinListState())
     val state = _state
         .onStart {
-            loadCoins()
+            coinRepository.getCoins().onEach { coins ->
+                val uiCoins = coins.map { it.toCoinUi() }
+                _state.update { it.copy(coins = uiCoins) }
+            }.launchIn(viewModelScope)
         }
         .stateIn(
             viewModelScope,
@@ -36,6 +44,12 @@ class CoinListViewModel(
 
     private val _events = Channel<CoinListEvent>()
     val events = _events.receiveAsFlow()
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            coinRepository.fetchCoins()
+        }
+    }
 
 
 
