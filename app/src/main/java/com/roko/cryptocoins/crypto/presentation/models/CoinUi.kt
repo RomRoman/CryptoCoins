@@ -1,6 +1,7 @@
 package com.roko.cryptocoins.crypto.presentation.models
 
 import androidx.annotation.DrawableRes
+import com.roko.cryptocoins.crypto.presentation.coin_detail.chart.DataPoint
 
 data class CoinUi(
     val id: String,
@@ -11,6 +12,7 @@ data class CoinUi(
     val price: DisplayableCurrency,
     val changePercentage24h: DisplayableNumber,
     @DrawableRes val iconRes: Int,
+    val coinPriceHistory: List<DataPoint> = emptyList(),
 )
 
 data class DisplayableCurrency(
